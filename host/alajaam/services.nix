@@ -1,35 +1,29 @@
+{ config, pkgs, ... }:
+
 let
-  tunnel-token = builtins.readFile "/run/secrets/tunnel/alajaam/token";
+  tunnel = "${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run";
+  token = config.sops.secrets."tunnel/alajaam/token".path;
 in
 {
+  imports = [
+    ../modules/services/soft-serve.nix
+  ];
+
   services = {
     openssh.enable = true;
     getty.autologinUser = "kubujuss";
-
-    soft-serve = {
-      enable = true;
-
-      settings = {
-        ssh = {
-          public_url = "ssh://git.risuhunnik.xyz";
-        };
-
-        initial_admin_keys = [
-          ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK9gAe8X398YBgMrHoRIPjnEiDoTRMg0VMM3Ll/MxSYh kubujuss@uss''
-        ];
-      };
-    };
   };
 
-  virtualisation.oci-containers.containers = {
-    tunnel = {
-      image = "cloudflare/cloudflared:latest";
-      cmd = [ "tunnel" "--no-autoupdate" "run" "--token" "${tunnel-token}" ];
+  systemd.services.tunnel = {
+    after = [ "network.target" "systemd-resolved.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      ExecStart = "/bin/sh -c '${tunnel} --token $(cat ${token})'";
+      Restart = "always";
     };
   };
 
   networking.firewall.allowedTCPPorts = [
-    23231 # soft-serve ssh
     22 #ssh
   ];
 }

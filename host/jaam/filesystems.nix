@@ -12,17 +12,17 @@
     };
 
     "/media/ssd" = {
-      device = "/dev/sdb1";
+      device = "/dev/disk/by-label/ssd";
       fsType = "ext4";
     };
 
     "/media/hdd" = {
-      device = "/dev/sda1";
+      device = "/dev/disk/by-label/hdd";
       fsType = "ext4";
     };
   };
 
   swapDevices = [
-    { device = "/dev/disk/by-label/swap"; }
+    { device = "/var/lib/swapfile"; size = 32 * 1024; }
   ];
 }

@@ -10,12 +10,13 @@ in
 {
   programs.neovim = {
     enable = true;
+
+    viAlias = true;
     vimAlias = true;
+
     defaultEditor = true;
 
-    extraPackages = with pkgs; [
-      ripgrep
-    ];
+    extraPackages = with pkgs; [ ripgrep ];
   };
 
   home.file.".config/nvim".source = conf.outPath + "/.config/nvim";

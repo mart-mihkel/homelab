@@ -16,6 +16,7 @@
   environment.systemPackages = with pkgs; [
     neofetch
     gnumake
+    ripgrep
     nodejs
     cargo
     tmux
