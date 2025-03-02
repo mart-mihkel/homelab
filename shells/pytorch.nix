@@ -9,6 +9,7 @@ let
     numpy
     scipy
     torch
+    tqdm
   ]);
 in
 pkgs.mkShell {

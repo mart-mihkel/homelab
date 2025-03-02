@@ -7,6 +7,7 @@ let
     pandas
     numpy
     scipy
+    tqdm
   ]);
 in
 pkgs.mkShell {

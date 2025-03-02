@@ -8,31 +8,28 @@ let
     };
   };
 
-  tf-kernel = python.withPackages (p: with p; [
+  pycommon = p: with p; [
     scikit-learn
-    tensorflow
     matplotlib
-    ipykernel
     plotnine
     seaborn
     pandas
     numpy
     scipy
-  ]);
+    tqdm
+  ];
+
+  tf-kernel = python.withPackages (p: with p; [
+    ipykernel
+    tensorflow
+  ] ++ (pycommon p));
 
   torch-kernel = python.withPackages (p: with p; [
-    scikit-learn
+    ipykernel
     torchvision
     torchaudio
-    matplotlib
-    ipykernel
-    plotnine
-    seaborn
-    pandas
-    numpy
-    scipy
     torch
-  ]);
+  ] ++ (pycommon p));
 in
 {
   services = {
@@ -80,7 +77,7 @@ in
         jupyterlab-vim
         jupyterlab
         jupyterhub
-      ]);
+      ] ++ (pycommon p));
     };
   };
 
