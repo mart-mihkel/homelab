@@ -9,7 +9,10 @@
     };
   };
 
-  programs.nix-ld.enable = true;
+  programs = {
+    nix-ld.enable = true;
+    zsh.enable = true;
+  };
 
   virtualisation.docker.enable = true;
 
@@ -26,6 +29,7 @@
     wget
     tree
     btop
+    zsh
     wol
     git
     gcc
